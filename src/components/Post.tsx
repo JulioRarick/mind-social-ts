@@ -4,7 +4,7 @@ import { Comment } from './Comment';
 import { Avatar } from './Avatar';
 
 import styles from './Post.module.css';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
 
 interface Author {
    name: string;
@@ -12,10 +12,14 @@ interface Author {
    avatarUrl: string;
 }
 
+interface Content {
+   type: 'paragraph' | 'link';
+   content: string;
+}
 interface PostProps {
    author: Author;
    publishedAt: Date;
-   content: string;
+   content: Content[];
 }
 
 export function Post({ author, publishedAt, content }: PostProps) {
@@ -27,7 +31,7 @@ export function Post({ author, publishedAt, content }: PostProps) {
       addSuffix: true,
    });
 
-   function handleCreateNewComment() {
+   function handleCreateNewComment(event: FormEvent) {
       event.preventDefault();
 
       setComments([...comments, newCommentText]);
@@ -35,15 +39,15 @@ export function Post({ author, publishedAt, content }: PostProps) {
       setNewCommentText('');
    }
 
-   function handleNewCommentChange() {
+   function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
       event.target.setCustomValidity('');
       setNewCommentText(event.target.value);
    }
 
-   function handleCommentInvalid() {
+   function handleCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
       event.target.setCustomValidity('This field is mandatory!');
    }
-   function deleteComment(commentToDelete) {
+   function deleteComment(commentToDelete: string) {
       const commentsWithoutDeletedOne = comments.filter((comment) => {
          return comment !== commentToDelete;
       });

@@ -1,11 +1,15 @@
-/* eslint-disable react/prop-types */
-import styles from './Avatar.module.css';
+import { ImgHTMLAttributes } from 'react';
 
-export function Avatar({ hasBorder = true, src }) {
+import styles from './Avatar.module.css';
+interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
+   hasBorder?: boolean;
+}
+
+export function Avatar({ hasBorder = true, ...props }: AvatarProps) {
    return (
       <img
          className={hasBorder ? styles.avatarWithBorder : styles.avatar}
-         src={src}
+         {...props}
       />
    );
 }
